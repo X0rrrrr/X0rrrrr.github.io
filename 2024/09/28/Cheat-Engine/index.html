@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CE练习 | x0r's blog</title><meta name="author" content="x0r"><meta name="copyright" content="x0r"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="任务  将完成CE自带小练习1~8这篇写的有点乱了qwq 第一关： 知识点： 精确扫描 通过数值变化确定地址  任务就是将这个100改成1000，我们可以通过CE打开这个小练习，然后扫描类型选中精确数值，数值类型从4字节开始(这个值有可能是char short int等等)我们从可能性大的DWORD 开始找，然后点击首次扫描就行了。 扫描后这里出现很多100啊，我们应该怎么找到那个100的值呢。这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CE练习">
+<meta property="og:url" content="http://example.com/2024/09/28/Cheat-Engine/index.html">
+<meta property="og:site_name" content="x0r&#39;s blog">
+<meta property="og:description" content="任务  将完成CE自带小练习1~8这篇写的有点乱了qwq 第一关： 知识点： 精确扫描 通过数值变化确定地址  任务就是将这个100改成1000，我们可以通过CE打开这个小练习，然后扫描类型选中精确数值，数值类型从4字节开始(这个值有可能是char short int等等)我们从可能性大的DWORD 开始找，然后点击首次扫描就行了。 扫描后这里出现很多100啊，我们应该怎么找到那个100的值呢。这">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/user1.jpg">
+<meta property="article:published_time" content="2024-09-28T10:25:59.000Z">
+<meta property="article:modified_time" content="2024-09-28T10:43:53.732Z">
+<meta property="article:author" content="x0r">
+<meta property="article:tag" content="滴水三期">
+<meta property="article:tag" content="win32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/user1.jpg"><link rel="shortcut icon" href="/img/user1.jpg"><link rel="canonical" href="http://example.com/2024/09/28/Cheat-Engine/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CE练习',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-28 18:43:53'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/user1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="x0r's blog"><span class="site-name">x0r's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CE练习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-28T10:25:59.000Z" title="发表于 2024-09-28 18:25:59">2024-09-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-09-28T10:43:53.732Z" title="更新于 2024-09-28 18:43:53">2024-09-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%BB%B4%E6%B0%B4%E4%B8%89%E6%9C%9F/">滴水三期</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%BB%B4%E6%B0%B4%E4%B8%89%E6%9C%9F/win32/">win32</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CE练习"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h1><hr>
+<hr>
+<p>将完成CE自带小练习1~8<br>这篇写的有点乱了qwq</p>
+<h2 id="第一关："><a href="#第一关：" class="headerlink" title="第一关："></a>第一关：</h2><hr>
+<h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>精确扫描</li>
+<li>通过数值变化确定地址<br><img src="/./../images/QQ_1727361720535.png" alt="QQ_1727361720535"></li>
+</ul>
+<p>任务就是将这个100改成1000，我们可以通过CE打开这个小练习，然后扫描类型选中精确数值，数值类型从4字节开始(这个值有可能是char short int等等)我们从可能性大的DWORD 开始找，然后点击首次扫描就行了。</p>
+<p><img src="/./../images/QQ_1727361872771.png" alt="QQ_1727361872771"><br>扫描后这里出现很多100啊，我们应该怎么找到那个100的值呢。这就是CE的精髓了，需要通过寻找变化来获取到那个地址。就例如这里的打我会让数值降低到97，那我们在精确数值那里输入97再次扫描就能看到排除了很多选项了<br><img src="/./../images/QQ_1727362028546.png" alt="QQ_1727362028546"></p>
+<p>这个地址的97应该就是我们需要的了，直接双击一下，然后在数值那里改成1000，就可以下一步了：<br><img src="/./../images/QQ_1727425526637.png" alt="QQ_1727425526637"></p>
+<h2 id="第二关："><a href="#第二关：" class="headerlink" title="第二关："></a>第二关：</h2><hr>
+<h3 id="知识点：-1"><a href="#知识点：-1" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>介于两者之间的扫描类型</li>
+<li>通过变化扫描</li>
+</ul>
+<p><img src="/./../images/222.png" alt="222"></p>
+<p>OK，那我们这次就可以在新的扫描前选择介于两者之间<br><img src="/./../images/QQ_1727425818197.png" alt="QQ_1727425818197"></p>
+<p>然后回到CE的精髓就是变化，点击”打我”让这个地址的数值发生变化，然后在扫描类型中选择数值变化的方向（增加还是减少）这里”打我”了两次,第二次是-9，那就是数值减少了9，然后再进行再次扫描就扫出来了，然后直接把这个值改成题目要求的就能过了。<br><img src="/./../images/QQ_1727426148994.png" alt="QQ_1727426148994"></p>
+<h2 id="第三关"><a href="#第三关" class="headerlink" title="第三关"></a>第三关</h2><hr>
+<h3 id="知识点：-2"><a href="#知识点：-2" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>单精度，双精度浮点扫描</li>
+</ul>
+<p>在前面的教程中我们使用字节的方式进行扫描，但有些游戏使用了”浮点数”来存储数值（这么做是为了给菜鸟制造一些麻烦，让他们没那么容易修改游戏）。<br>正如本关中的健康和弹药，两者都以浮点方法储存数据，不同的是，健康值为单精度浮点数，而弹药值为双精度浮点数。<br>点击”打我”将减少一些健康值，而点击”开火”则消耗掉 0.5 的弹药。<br><img src="/./../images/QQ_1727426391155.png" alt="QQ_1727426391155"></p>
+<p>这个的话就按照上面的方法然后将数值类型换成单浮点和双浮点一个个找就行了。</p>
+<h2 id="第四关"><a href="#第四关" class="headerlink" title="第四关"></a>第四关</h2><hr>
+<h3 id="知识点：-3"><a href="#知识点：-3" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>找出什么改写了这个地址的使用</li>
+<li>修改汇编代码</li>
+</ul>
+<blockquote>
+<p>这关的要求就是：点击改变数值时不让这个数值发生变化<br><img src="/./../images/QQ_1727504922208.png" alt="QQ_1727504922208"></p>
+</blockquote>
+<p>我们可以先通过精确查找找出这个值存放的位置，(观察bianhua!!)，接着可以右键查看是什么改写了该地址。就是看看什么指令对这个地址操作了，然后查看汇编窗口直接修改指令就好了。<br>![Pasted image 20240928143348](.&#x2F;..&#x2F;images&#x2F;Pasted image 20240928143348.png)</p>
+<p>右键选框，然后再选择找出是什么改写了这个地址，接着就会打开弹出这个页面，选择改变数值后右边的窗口就会出现让这个地址里面的值改变的代码，这时候选中这条指令，显示反汇编程序，就可以将这个指令进行修改了，要想数值不变，直接将这个指令改成nop就行。</p>
+<p><img src="/./../images/4353.png" alt="4353"></p>
+<blockquote>
+<p>可以看到当我们点击改变数值的时候这个值也不会变化了，下一步按钮也亮了</p>
+</blockquote>
+<p><img src="/./../images/QQ_1727505504581.png" alt="QQ_1727505504581"></p>
+<h2 id="第五关"><a href="#第五关" class="headerlink" title="第五关"></a>第五关</h2><hr>
+<h3 id="知识点：-4"><a href="#知识点：-4" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>指针</li>
+<li>通过添加地址来设置指针</li>
+</ul>
+<p>上一关使用了代码查找器，这一关则使用指针的方法确定地址。<br>点击 <code>改变数值</code> 数值都会改变。点击 <code>改变指针</code> 有点类似重新开始一局游戏，这意味着，数值的地址会改变。<br>你需要做的是：将数值锁定在5000，即使点击 <code>改变指针</code> 改变了数值所在地址之后。</p>
+<p><img src="/./../images/QQ_1727505958080.png" alt="QQ_1727505958080"></p>
+<p>首先先通过前面的步骤先找到这个数值所在的地址。然后通过 “找出是什么改写了该地址” 找出这个值变化的指令：</p>
+<p><img src="/./../images/QQ_1727506212450.png" alt="QQ_1727506212450"></p>
+<p>OK，那么这个就是改变数值的指令。不难发现这个<code>[rdx]</code>就是个指针，然后选中这条指令，详细信息，就可以看到rdx的值。</p>
+<p><img src="/./../images/QQ_1727506550510.png" alt="QQ_1727506550510"></p>
+<p>此时的rdx是这个值，我们直接选择新的扫描，然后把十六进制勾上<br>![Pasted image 20240928145941](.&#x2F;..&#x2F;images&#x2F;Pasted image 20240928145941.png)<br>这里出现了两个，直觉告诉我是第二个才是。在大一点的程序中分析时搜一个值可能会出现多个情况，这下就要逐一排查了。这里我选择第二个。然后这里存储的就是那个地址了嘛，右键然后更改记录，选择地址<br>![Pasted image 20240928150632](.&#x2F;..&#x2F;images&#x2F;Pasted image 20240928150632.png)</p>
+<p>然后勾选指针，可以看出这个就是存着 存着数值的那个地址 的地址了。然后点击确定<br><img src="/./../images/QQ_1727507238664-1727519482207-18.png" alt="QQ_1727507238664"></p>
+<p>这里改成5000，然后激活勾选上(里面的值锁定)，点击改变指针就发现5000被锁定了。OK下一关</p>
+<h2 id="第六关：代码注入"><a href="#第六关：代码注入" class="headerlink" title="第六关：代码注入"></a>第六关：代码注入</h2><hr>
+<h3 id="知识点：-5"><a href="#知识点：-5" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>当要修改一段指令的时长度不够怎么办</li>
+</ul>
+<blockquote>
+<p>任务要求：点击改变数值时将数值增加</p>
+</blockquote>
+<p><img src="/./../images/QQ_1727510500094.png" alt="QQ_1727510500094"></p>
+<p>老样子，重复第四关的操作，知道打开正确的汇编代码页面，然后选中修改值的那条指令-&gt;工具-&gt;自动汇编<br><img src="/./../images/4353-1727520177159-8.png" alt="4353"></p>
+<p>然后就会弹出这个框，选择模板，代码注入然后就会自动生成一个模板，在这里修改成<code>add dword ptr [rsi+000007E0],02</code>就行<br>![Pasted image 20240928160610](.&#x2F;..&#x2F;images&#x2F;Pasted image 20240928160610.png)<br><img src="/./../images/QQ_1727510827476.png" alt="QQ_1727510827476"></p>
+<p>点击执行，再回到教程中点击改变数值就已经是增加了。</p>
+<h6 id="注入原理："><a href="#注入原理：" class="headerlink" title="注入原理："></a>注入原理：</h6><ul>
+<li>这里的代码注入原理其实与之前课程里面讲到的在空白区域加代码很像，只不过那个是在静态文件中加的，这个是在程序运行后加的</li>
+</ul>
+<h2 id="第七关：多级指针"><a href="#第七关：多级指针" class="headerlink" title="第七关：多级指针"></a>第七关：多级指针</h2><hr>
+<h3 id="知识点：-6"><a href="#知识点：-6" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>对指针和多级指针的汇编熟练度</li>
+</ul>
+<blockquote>
+<p>任务要求：还是设置值，然后在改变指针时锁定这个值</p>
+</blockquote>
+<p><img src="/./../images/sadasd.png" alt="sadasd"></p>
+<p>还是老样子，先找出这个值所在的地址，然后找出是什么改变了这个地址<br><img src="/./../images/sadasd-1727520228447-13.png" alt="sadasd"><br>发现是这么个东西，这个样子就像是结构体。（不知道也不影响)然后我们记下这个指令和此时rsi的值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov [rsi + <span class="number">0x18</span>] , eax</span><br><span class="line"><span class="meta"># rsi = 000000000163E170</span></span><br></pre></td></tr></table></figure>
+
+<p>那我们就开始往上找了。将这个rsi的值复制出来，然后新的扫描-&gt;十六进制-&gt;首次扫描，接着就找到了存这个rsi的地址了。<br><img src="/./../images/sadasd-1727520214646-11.png" alt="sadasd"></p>
+<p>下一步我们右键这个选项，然后选择找出是谁访问了该地址。这里为什么不用改写呢？因为访问包括了改写，但是如果对这里的操作不一定是改写，也有可能是引用。（就是从里面拿值）<br><img src="/./../images/QQ_1727512609729.png" alt="QQ_1727512609729"></p>
+<p>接下来找到有两条指令，第一条cmp就不管了没啥影响。直接看第二条，就是将rsi中的值当作地址然后取这个地址里面的值给到rsi，那么我们就来看看这个rsi是什么成分。<br>诶？不对啊，为什么这个rsi和外面选中的数值是一样的？这里就是CE的一个坑了，当我们选中这段指令的时候，下面各个寄存器的信息都是这条指令执行完之后的状态，也就是说这个rsi是mov完之后的值。那我们怎么找到之前的rsi呢？这里用两种方法：</p>
+<ol>
+<li>断点调试：在汇编代码中这条指令的前一条指令下段，然后运行到那个位置，就能找到rsi的值了</li>
+<li>想一想：我们当时找的不是谁访问了这个地方吗，当我们切换数值时这个<code>mov rsi,[rsi]</code>访问了这个地址，然后把这个地址，然后把rsi变成了163e170,那原来rsi是什么呢？不就是存着163e170的地址160b750了吗。<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov rsi,[rsi]</span><br><span class="line"><span class="meta">#rsi = 160b750</span></span><br></pre></td></tr></table></figure>
+接下来就按照上面的方法查找rsi所存的地址的值<img src="/./../images/QQ_1727517193318.png" alt="QQ_1727517193318"></li>
+</ol>
+<p>记录下这次的指令和rsi的值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov rsi,[rsi+<span class="number">0x18</span>]</span><br><span class="line"><span class="meta"># rsi+18 = 0x1624198</span></span><br></pre></td></tr></table></figure>
+<p>这次就不能直接找这个地址的值了，因为这里的指令时<code>mov rsi,[rsi+0x18]</code>是加上0x18的，所以找的时候得将地址减去0x18即0x1624180</p>
+<p><img src="/./../images/QQ_1727517686661.png" alt="QQ_1727517686661"></p>
+<p>重复操作，记下这个指令和rsi</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov rsi,[rsi+<span class="number">0x10</span>]</span><br><span class="line"><span class="meta"># rsi+0x10 = 15a1080</span></span><br><span class="line"><span class="meta"># rsi = 15a1070</span></span><br></pre></td></tr></table></figure>
+
+<p>接着继续搜15a1070<br><img src="/./../images/QQ_1727518063105.png" alt="QQ_1727518063105"></p>
+<p>这里已经看见基址了，就说明找指针这个过程完成了,根据上述记录的各个操作我们可以得出以下式子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># [rsi+<span class="number">0x18</span>] = [[rsi]+<span class="number">0x18</span>] = [[[rsi+<span class="number">0x18</span>]]+<span class="number">0x18</span>] = [[[[rsi + <span class="number">0x10</span>]+<span class="number">0x18</span>]]+<span class="number">0x18</span>]</span><br></pre></td></tr></table></figure>
+<p>这里的rsi指的是不同级的<br>所以最终的数值存放的位置用指针来表示就是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># [[[[基址 + <span class="number">0x10</span>]+<span class="number">0x18</span>]]+<span class="number">0x18</span>]</span><br></pre></td></tr></table></figure>
+
+<p>我们在选中最下面的那个选项然后按照之前设置指针的方法将它设置成指针，但是要添加偏移量<br>![Pasted image 20240928181435](.&#x2F;..&#x2F;images&#x2F;Pasted image 20240928181435.png)<br>点击确定后可以看到已经指向了数值位置了<br>![Pasted image 20240928181810](.&#x2F;..&#x2F;images&#x2F;Pasted image 20240928181810.png)<br>我们将值改成5000然后锁定，改变指针然后就可以过关了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
+<p>这只是CE的一个附带小程序，所以查找会比较方便。但是一些大一点的程序可能每次扫描出来的结果会有很多，这时候就得慢慢查找了。还得不断练习提升。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">x0r</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/09/28/Cheat-Engine/">http://example.com/2024/09/28/Cheat-Engine/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">x0r's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%BB%B4%E6%B0%B4%E4%B8%89%E6%9C%9F/">滴水三期</a><a class="post-meta__tags" href="/tags/win32/">win32</a></div><div class="post_share"><div class="social-share" data-image="/img/user1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/09/16/win32-create-process/" title="win32进程创建_句柄表"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">win32进程创建_句柄表</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/09/16/win32-create-process/" title="win32进程创建_句柄表"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-16</div><div class="title">win32进程创建_句柄表</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/user1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">x0r</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.</span> <span class="toc-text">任务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E5%85%B3%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">第一关：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">知识点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%85%B3%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">第二关：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">知识点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%85%B3"><span class="toc-number">1.3.</span> <span class="toc-text">第三关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A-2"><span class="toc-number">1.3.1.</span> <span class="toc-text">知识点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E5%85%B3"><span class="toc-number">1.4.</span> <span class="toc-text">第四关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A-3"><span class="toc-number">1.4.1.</span> <span class="toc-text">知识点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E5%85%B3"><span class="toc-number">1.5.</span> <span class="toc-text">第五关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A-4"><span class="toc-number">1.5.1.</span> <span class="toc-text">知识点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E5%85%B3%EF%BC%9A%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5"><span class="toc-number">1.6.</span> <span class="toc-text">第六关：代码注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A-5"><span class="toc-number">1.6.1.</span> <span class="toc-text">知识点：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-number">1.6.1.0.0.1.</span> <span class="toc-text">注入原理：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E5%85%B3%EF%BC%9A%E5%A4%9A%E7%BA%A7%E6%8C%87%E9%92%88"><span class="toc-number">1.7.</span> <span class="toc-text">第七关：多级指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9A-6"><span class="toc-number">1.7.1.</span> <span class="toc-text">知识点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/28/Cheat-Engine/" title="CE练习">CE练习</a><time datetime="2024-09-28T10:25:59.000Z" title="发表于 2024-09-28 18:25:59">2024-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/16/win32-create-process/" title="win32进程创建_句柄表">win32进程创建_句柄表</a><time datetime="2024-09-16T08:41:36.000Z" title="发表于 2024-09-16 16:41:36">2024-09-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/15/win32%E4%BA%8B%E4%BB%B6/" title="win32事件">win32事件</a><time datetime="2024-09-15T10:10:24.000Z" title="发表于 2024-09-15 18:10:24">2024-09-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/15/hello-world/" title="Hello World">Hello World</a><time datetime="2024-09-15T04:25:08.671Z" title="发表于 2024-09-15 12:25:08">2024-09-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By x0r</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
