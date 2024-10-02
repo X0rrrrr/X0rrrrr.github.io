@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>OD+CE练习</title>
+      <link href="/2024/10/02/OD-CE/"/>
+      <url>/2024/10/02/OD-CE/</url>
+      
+        <content type="html"><![CDATA[<h1 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h1><hr><p>将上节课的第八关：多级指针用OD找出。</p><p>首先用OD打开测试题，运行到第八关这里我用x64dbg。</p><p><img src="/./../images/QQ_1727849210680.png" alt="QQ_1727849210680"></p><p>OK，已经是第八关了，然后我们再用CE找出改变这个数值的指令在什么位置。将信息复制出来，然后在xdbg里直接跳到这个位置。(这里是没有做地址随机才可以这样)</p><p><img src="/./../images/QQ_1727849388747.png" alt="QQ_1727849388747"></p><p>我们来到xdbg看看是怎么情况：</p><p><img src="/./../images/QQ_1727849538243.png" alt="QQ_1727849538243"></p><p>跳到这个位置，发现就是将eax,移动到[rsi + 0x18]地址。在这里打上断点see see，然后在第八关点击改变数值，程序就会断在这里</p><p><img src="/./../images/QQ_1727849687658.png" alt="QQ_1727849687658"></p><p>到这里后看看rsi的值：</p><p><img src="/./../images/QQ_1727849824238.png" alt="QQ_1727849824238"></p><p>这个rsi已经是最终值了，我们看看这个[rsi+0x18]里面装了啥东西。在下面的命令窗口中输入</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump rsi+<span class="number">0x18</span></span><br></pre></td></tr></table></figure><p>在od中的指令是：<code>dd rsi + 0x18</code></p><p><img src="/./../images/QQ_1727849908321.png" alt="QQ_1727849908321"></p><p>这样内存窗口就到了地址<code>rsi+0x18</code>的位置了。然后这个四字节应该就是数值了，但是现在还不是更改后的。我们将程序放过去，然后在查看这个位置的值。</p><p><img src="/./../images/QQ_1727850041316.png" alt="QQ_1727850041316"></p><p>可以看到现在这里存着的是2315，看看关卡中的值是什么：</p><p><img src="/./../images/QQ_1727850093433.png" alt="QQ_1727850093433"></p><p>那么这个地址就对了。再看看上面xdbg的指令，是将eax的值放到[rsi+0x18]中,先将第一次层地址关系写出来，</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值 = [rsi+<span class="number">0x18</span>]</span><br></pre></td></tr></table></figure><p>然后我们下一步就要找rsi的值是怎么来的，我们往上找，先找最近的第一个rsi(放在左边的rsi):</p><p><img src="/./../images/QQ_1727850782071.png" alt="QQ_1727850782071"></p><p>找到最近的一个rsi，现在这个地方断个点，然后改变数值执行一下，看看会不会执行这段代码，如果不会就继续往上找(后面的也是这样处理)。这里运行了一下，发现确实能够被断下，那这里就是第层了，此时rsi的值是被<code>mov rsi,[rsi]</code>改的所以这里的地址关系式就是：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值 = [[rsi] + <span class="number">0x18</span>]</span><br></pre></td></tr></table></figure><p>OK,那下一步就是找右边的rsi是怎么改变的了，继续往上找：</p><p><img src="/./../images/QQ_1727851056580.png" alt="QQ_1727851056580"></p><p>还是同样的套路找出这里，到这里的关系式继续写</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值 = [[[rsi + <span class="number">0x18</span>]]+<span class="number">0x18</span>]</span><br></pre></td></tr></table></figure><p>继续重复，下一层还是找rsi改变的地方：</p><p><img src="/./../images/QQ_1727851173864.png" alt="QQ_1727851173864"></p><p>写出这里的关系：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值 = [[[[rsi+<span class="number">0x10</span>]+<span class="number">0x18</span>]]+<span class="number">0x18</span>]</span><br></pre></td></tr></table></figure><p>继续下一层，找rsi：</p><p><img src="/./../images/QQ_1727851269061.png" alt="QQ_1727851269061"></p><p>OK，这里的rsi就是[100325B00]里面的值，每次点击改变指针，这里面的值会变，然后rsi跟着变导致之前的地址变化，我们直接用这个地址加上偏移就能直接找到存值的地址了，不管这个地址怎么变,关系式如下：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值 = [[[[[<span class="number">100325B</span>00]+<span class="number">0x10</span>]+<span class="number">0x18</span>]]+<span class="number">0x18</span>]</span><br></pre></td></tr></table></figure><p>我们将这个关系式子在命令中用<code>dump</code>查看一下：</p><p><img src="/./../images/QQ_1727851628356.png" alt="QQ_1727851628356"></p><p>可以发现这里就是那个地址了。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr><ul><li>这个程序相对还是很简单的，如果遇到复杂的，在整个空间相关寄存器都没有变化的话就得看看是不是有在函数调用时，将这个值通过参数传递传进来了</li><li>还要多调试</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 滴水三期 </category>
+          
+          <category> win32 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 滴水三期 </tag>
+            
+            <tag> win32 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CE练习</title>
       <link href="/2024/09/28/Cheat-Engine/"/>
       <url>/2024/09/28/Cheat-Engine/</url>
