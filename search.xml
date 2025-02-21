@@ -29,6 +29,33 @@
     
     
     <entry>
+      <title>RE刷题记录 —— 01</title>
+      <link href="/2024/10/23/ctf-re-hw1/"/>
+      <url>/2024/10/23/ctf-re-hw1/</url>
+      
+        <content type="html"><![CDATA[<h4 id="1-SUCTF2019-hardcpp"><a href="#1-SUCTF2019-hardcpp" class="headerlink" title="1. [SUCTF2019]hardcpp"></a>1. [SUCTF2019]hardcpp</h4><p>这题是一道非常经典的混淆题目，将附件下载后我们来查看这个附件的信息：</p><p><img src="/./../images/image-20250219115247824.png" alt="image-20250219115247824"></p><p>​die非常的智能已经分析出来的用来LLVM的保护器了，然后文件是elf 64位文件。直接用ida64打开，打开后直接先看一眼main函数，发现这个流程图非常的恶心，再结合之前die给出的保护器就可以判断这个用到的是<code>ollvm</code>的保护了：</p><p><img src="/./../images/image-20250219115605804.png" alt="image-20250219115605804"></p><p>​这个ollvm的开始就是main函数，此时我们可以通过<code>deflat</code>来处理掉这些个控制流平坦化。(<code>deflat</code>具体安装步骤自行前往网上查找)，接着就是直接使用<code>deflat.py</code>来去掉这个控制流平坦化，通过汇编代码找到函数开始的地址为<code>0x4007E0</code>:</p><p><img src="/./../images/image-20250219120021366.png" alt="image-20250219120021366"></p><p>​直接启动<code>defluat.py</code>：</p><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python deflat.py -f ../hardCpp --addr <span class="number">0</span>x4007e0</span><br></pre></td></tr></table></figure><ul><li><code>-f</code>：后面跟的是要修改的文件的路径</li><li><code>--addr</code>：文件修改的起始地址（ida中的地址）</li></ul><p>​成功后就会生成一个<code>hardCpp_recovered</code>文件。此时再通过ida打开这个文件就可以看到已经去掉了控制流平坦化了，接下来就可以分析了。</p><p><img src="/./../images/image-20250219120546503.png" alt="image-20250219120546503"></p><p>​函数开始就有挺多疑点的，看到puts了一串东西，这串看起来像是hex、或者md5，拿去md5查询看看先，通过最终发现确实是md5，而且明文为<code>#</code>，</p><p><img src="/./../images/image-20250219120747543.png" alt="image-20250219120747543"></p><p>​接着，下面就紧接着一个输入一个<code>s</code>了，那么这个应该就是<code>#</code>，（怀疑一下），然后输入了v24，长度21字节，但是是包含最后一个0的，所以有效明文应该是s + v24这样子 (因为查看内存后这两个地址是相连的)。还有这两个time，作用是获取输入时的时间间隔，然后相减赋值给21，那就猜一下按照出题人的想法应该是0，接着继续往下分析。</p><p><img src="/./../images/image-20250219121151012.png" alt="image-20250219121151012"></p><p>可以看到啊，有一堆意义不明的y和x在做条件判断，点进去看看内存是在<code>.bss</code>段，那么这个段是用来存放未初始化的全局变量的，这下子基本就可以判断是混淆了，我们在分析的时候就可以不用判断这些。还有一个<code>v19 &lt; 21</code>，这个应该就是循环的轮数，但是是从1开始的，也就是20次。接着就可以分析while循环中了。</p><p><img src="/./../images/image-20250219121506918.png" alt="image-20250219121506918"></p><p>​来到循环后发现貌似是有两段加密，但是仔细分析后发现只有上面的是有用的，为什么呢？因为这里的<code>while(1)</code>，那说明混淆的地方是一定要执行break的，不然程序就无法出去，接着一堆意义不明的函数名，我们点击进去就可以发现其实只是一些操作而已。</p><p><img src="/./../images/image-20250219121845248.png" alt="image-20250219121845248"></p><p>这些就是分析后的函数，其中有几个内部的逻辑看起来好像很抽象，实际上没什么，就例如add这个函数：</p><p><img src="/./../images/image-20250219122015389.png" alt="image-20250219122015389"></p><p>但其实只需要先看到最下面的<code>ret v15</code>然后再往上看看，就能够发现整个函数只是a1 + a2也就是实现了相加的功能，其他的函数分析也是如此。</p><p>​根据这几个函数就能够写出一个等式：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(s[cnt] + (s[cnt - <span class="number">1</span>] % <span class="number">7</span>)) ^ ((s[cnt - <span class="number">1</span>] ^ <span class="number">18</span>) * <span class="number">3</span> + <span class="number">2</span>) == enc[cnt - <span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">---&gt;  s[cnt] = (enc[cnt - <span class="number">1</span>]^ ((s[cnt - <span class="number">1</span>] ^ <span class="number">18</span>) * <span class="number">3</span> + <span class="number">2</span>)) - (s[cnt - <span class="number">1</span>] % <span class="number">7</span>)) </span><br></pre></td></tr></table></figure><p>由于第一个元素是<code>#</code>，那我们就可以将enc扒出来，然后写出脚本</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> enc[] = &#123; <span class="number">0xF3</span>, <span class="number">0x2E</span>, <span class="number">0x18</span>, <span class="number">0x36</span>, <span class="number">0xE1</span>, <span class="number">0x4C</span>, <span class="number">0x22</span>, <span class="number">0xD1</span>, <span class="number">0xF9</span>, <span class="number">0x8C</span>,<span class="number">0x40</span>, <span class="number">0x76</span>, <span class="number">0xF4</span>, <span class="number">0x0E</span>, <span class="number">0x00</span>, <span class="number">0x05</span>, <span class="number">0xA3</span>, <span class="number">0x90</span>, <span class="number">0x0E</span>, <span class="number">0xA5</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> input[<span class="number">21</span>] = &#123;&#125;;</span><br><span class="line">input[<span class="number">0</span>] = <span class="string">&#x27;#&#x27;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">    input[i + <span class="number">1</span>] = (enc[i] ^ ((input[i] ^ <span class="number">18</span>) * <span class="number">3</span> + <span class="number">2</span>)) - (input[i] % <span class="number">7</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, input[i + <span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>flag：</strong><code>flag&#123;mY-CurR1ed_Fns&#125;</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+          <category> Re </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf刷题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>22.Inline_Hook</title>
       <link href="/2024/10/10/Inline-Hook/"/>
       <url>/2024/10/10/Inline-Hook/</url>

@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RE刷题记录 —— 01 | x0r's blog</title><meta name="author" content="x0r"><meta name="copyright" content="x0r"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1. [SUCTF2019]hardcpp这题是一道非常经典的混淆题目，将附件下载后我们来查看这个附件的信息：  ​	die非常的智能已经分析出来的用来LLVM的保护器了，然后文件是elf 64位文件。直接用ida64打开，打开后直接先看一眼main函数，发现这个流程图非常的恶心，再结合之前die给出的保护器就可以判断这个用到的是ollvm的保护了：  ​	这个ollvm的开始就是main函数，此">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RE刷题记录 —— 01">
+<meta property="og:url" content="http://example.com/2024/10/23/ctf-re-hw1/index.html">
+<meta property="og:site_name" content="x0r&#39;s blog">
+<meta property="og:description" content="1. [SUCTF2019]hardcpp这题是一道非常经典的混淆题目，将附件下载后我们来查看这个附件的信息：  ​	die非常的智能已经分析出来的用来LLVM的保护器了，然后文件是elf 64位文件。直接用ida64打开，打开后直接先看一眼main函数，发现这个流程图非常的恶心，再结合之前die给出的保护器就可以判断这个用到的是ollvm的保护了：  ​	这个ollvm的开始就是main函数，此">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/user1.jpg">
+<meta property="article:published_time" content="2024-10-23T13:12:23.000Z">
+<meta property="article:modified_time" content="2025-02-19T11:56:58.831Z">
+<meta property="article:author" content="x0r">
+<meta property="article:tag" content="ctf刷题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/user1.jpg"><link rel="shortcut icon" href="/img/user1.jpg"><link rel="canonical" href="http://example.com/2024/10/23/ctf-re-hw1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RE刷题记录 —— 01',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-02-19 19:56:58'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/user1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="x0r's blog"><span class="site-name">x0r's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">RE刷题记录 —— 01</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-23T13:12:23.000Z" title="发表于 2024-10-23 21:12:23">2024-10-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-19T11:56:58.831Z" title="更新于 2025-02-19 19:56:58">2025-02-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/Re/">Re</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="RE刷题记录 —— 01"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="1-SUCTF2019-hardcpp"><a href="#1-SUCTF2019-hardcpp" class="headerlink" title="1. [SUCTF2019]hardcpp"></a>1. [SUCTF2019]hardcpp</h4><p>这题是一道非常经典的混淆题目，将附件下载后我们来查看这个附件的信息：</p>
+<p><img src="/./../images/image-20250219115247824.png" alt="image-20250219115247824"></p>
+<p>​	die非常的智能已经分析出来的用来LLVM的保护器了，然后文件是elf 64位文件。直接用ida64打开，打开后直接先看一眼main函数，发现这个流程图非常的恶心，再结合之前die给出的保护器就可以判断这个用到的是<code>ollvm</code>的保护了：</p>
+<p><img src="/./../images/image-20250219115605804.png" alt="image-20250219115605804"></p>
+<p>​	这个ollvm的开始就是main函数，此时我们可以通过<code>deflat</code>来处理掉这些个控制流平坦化。(<code>deflat</code>具体安装步骤自行前往网上查找)，接着就是直接使用<code>deflat.py</code>来去掉这个控制流平坦化，通过汇编代码找到函数开始的地址为<code>0x4007E0</code>:</p>
+<p><img src="/./../images/image-20250219120021366.png" alt="image-20250219120021366"></p>
+<p>​	直接启动<code>defluat.py</code>：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python deflat.py -f ../hardCpp --addr <span class="number">0</span>x4007e0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-f</code>：后面跟的是要修改的文件的路径</li>
+<li><code>--addr</code>：文件修改的起始地址（ida中的地址）</li>
+</ul>
+<p>​	成功后就会生成一个<code>hardCpp_recovered</code>文件。此时再通过ida打开这个文件就可以看到已经去掉了控制流平坦化了，接下来就可以分析了。</p>
+<p><img src="/./../images/image-20250219120546503.png" alt="image-20250219120546503"></p>
+<p>​	函数开始就有挺多疑点的，看到puts了一串东西，这串看起来像是hex、或者md5，拿去md5查询看看先，通过最终发现确实是md5，而且明文为<code>#</code>，</p>
+<p><img src="/./../images/image-20250219120747543.png" alt="image-20250219120747543"></p>
+<p>​	接着，下面就紧接着一个输入一个<code>s</code>了，那么这个应该就是<code>#</code>，（怀疑一下），然后输入了v24，长度21字节，但是是包含最后一个0的，所以有效明文应该是s + v24这样子 (因为查看内存后这两个地址是相连的)。还有这两个time，作用是获取输入时的时间间隔，然后相减赋值给21，那就猜一下按照出题人的想法应该是0，接着继续往下分析。</p>
+<p><img src="/./../images/image-20250219121151012.png" alt="image-20250219121151012"></p>
+<p>可以看到啊，有一堆意义不明的y和x在做条件判断，点进去看看内存是在<code>.bss</code>段，那么这个段是用来存放未初始化的全局变量的，这下子基本就可以判断是混淆了，我们在分析的时候就可以不用判断这些。还有一个<code>v19 &lt; 21</code>，这个应该就是循环的轮数，但是是从1开始的，也就是20次。接着就可以分析while循环中了。</p>
+<p><img src="/./../images/image-20250219121506918.png" alt="image-20250219121506918"></p>
+<p>​	来到循环后发现貌似是有两段加密，但是仔细分析后发现只有上面的是有用的，为什么呢？因为这里的<code>while(1)</code>，那说明混淆的地方是一定要执行break的，不然程序就无法出去，接着一堆意义不明的函数名，我们点击进去就可以发现其实只是一些操作而已。</p>
+<p><img src="/./../images/image-20250219121845248.png" alt="image-20250219121845248"></p>
+<p>这些就是分析后的函数，其中有几个内部的逻辑看起来好像很抽象，实际上没什么，就例如add这个函数：</p>
+<p><img src="/./../images/image-20250219122015389.png" alt="image-20250219122015389"></p>
+<p>但其实只需要先看到最下面的<code>ret v15</code>然后再往上看看，就能够发现整个函数只是a1 + a2也就是实现了相加的功能，其他的函数分析也是如此。	</p>
+<p>​	根据这几个函数就能够写出一个等式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(s[cnt] + (s[cnt - <span class="number">1</span>] % <span class="number">7</span>)) ^ ((s[cnt - <span class="number">1</span>] ^ <span class="number">18</span>) * <span class="number">3</span> + <span class="number">2</span>) == enc[cnt - <span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">---&gt;  s[cnt] = (enc[cnt - <span class="number">1</span>]^ ((s[cnt - <span class="number">1</span>] ^ <span class="number">18</span>) * <span class="number">3</span> + <span class="number">2</span>)) - (s[cnt - <span class="number">1</span>] % <span class="number">7</span>)) </span><br></pre></td></tr></table></figure>
+
+<p>由于第一个元素是<code>#</code>，那我们就可以将enc扒出来，然后写出脚本</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> enc[] = &#123; <span class="number">0xF3</span>, <span class="number">0x2E</span>, <span class="number">0x18</span>, <span class="number">0x36</span>, <span class="number">0xE1</span>, <span class="number">0x4C</span>, <span class="number">0x22</span>, <span class="number">0xD1</span>, <span class="number">0xF9</span>, <span class="number">0x8C</span>,<span class="number">0x40</span>, <span class="number">0x76</span>, <span class="number">0xF4</span>, <span class="number">0x0E</span>, <span class="number">0x00</span>, <span class="number">0x05</span>, <span class="number">0xA3</span>, <span class="number">0x90</span>, <span class="number">0x0E</span>, <span class="number">0xA5</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> input[<span class="number">21</span>] = &#123;&#125;;</span><br><span class="line">input[<span class="number">0</span>] = <span class="string">&#x27;#&#x27;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">    input[i + <span class="number">1</span>] = (enc[i] ^ ((input[i] ^ <span class="number">18</span>) * <span class="number">3</span> + <span class="number">2</span>)) - (input[i] % <span class="number">7</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, input[i + <span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>flag：</strong><code>flag&#123;mY-CurR1ed_Fns&#125;</code></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">x0r</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/10/23/ctf-re-hw1/">http://example.com/2024/10/23/ctf-re-hw1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">x0r's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ctf%E5%88%B7%E9%A2%98/">ctf刷题</a></div><div class="post_share"><div class="social-share" data-image="/img/user1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/10/23/01_%E5%AF%BC%E5%85%A5%E8%A1%A8%E9%9A%90%E8%97%8F/" title="1.导入表隐藏"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">1.导入表隐藏</div></div></a></div><div class="next-post pull-right"><a href="/2024/10/10/Inline-Hook/" title="22.Inline_Hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">22.Inline_Hook</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/user1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">x0r</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-SUCTF2019-hardcpp"><span class="toc-number">1.</span> <span class="toc-text">1. [SUCTF2019]hardcpp</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/23/01_%E5%AF%BC%E5%85%A5%E8%A1%A8%E9%9A%90%E8%97%8F/" title="1.导入表隐藏">1.导入表隐藏</a><time datetime="2024-10-23T13:12:23.000Z" title="发表于 2024-10-23 21:12:23">2024-10-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/23/ctf-re-hw1/" title="RE刷题记录 —— 01">RE刷题记录 —— 01</a><time datetime="2024-10-23T13:12:23.000Z" title="发表于 2024-10-23 21:12:23">2024-10-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/10/Inline-Hook/" title="22.Inline_Hook">22.Inline_Hook</a><time datetime="2024-10-10T08:42:28.000Z" title="发表于 2024-10-10 16:42:28">2024-10-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/07/IAT-HOOK/" title="21.IAT_HOOK">21.IAT_HOOK</a><time datetime="2024-10-07T02:54:01.000Z" title="发表于 2024-10-07 10:54:01">2024-10-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/07/RemoteThread-inject/" title="19.ShellCode_远程线程注入">19.ShellCode_远程线程注入</a><time datetime="2024-10-07T02:41:31.000Z" title="发表于 2024-10-07 10:41:31">2024-10-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By x0r</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
